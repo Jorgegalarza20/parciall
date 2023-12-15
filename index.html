@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Suma</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    input {
+      width: calc(100% - 16px);
+      padding: 8px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    #tablaNumeros {
+      margin-bottom: 20px;
+    }
+
+    #resultado, #maximo, #minimo {
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Calculadora de Suma</h2>
+
+    <label for="numInput">Ingresa 4 números:</label>
+    <input type="text" id="numInput" maxlength="1" oninput="validateInput()">
+    <button onclick="agregarNumero()">Agregar Número</button>
+
+    <table id="tablaNumeros">
+      <thead>
+        <tr>
+          <th>Números ingresados</th>
+        </tr>
+      </thead>
+      <tbody id="numerosIngresados"></tbody>
+    </table>
+
+    <table id="tablaResultados">
+      <thead>
+        <tr>
+          <th>Suma</th>
+          <th>Máximo</th>
+          <th>Mínimo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="resultado"></td>
+          <td id="maximo"></td>
+          <td id="minimo"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let numeros = [];
+
+    function validateInput() {
+      let numInput = document.getElementById("numInput").value;
+      let regex = /^[0-9]$/;
+
+      if (!regex.test(numInput)) {
+        alert("Por favor, ingresa solo un número.");
+        document.getElementById("numInput").value = "";
+      }
+    }
+
+    function agregarNumero() {
+      let numInput = document.getElementById("numInput").value;
+
+      if (numInput !== "") {
+        numeros.push(parseInt(numInput));
+        actualizarTabla();
+        document.getElementById("numInput").value = "";
+
+        if (numeros.length === 4) {
+          document.getElementById("numInput").disabled = true;
+        }
+      }
+    }
+
+    function actualizarTabla() {
+      let tbodyNumeros = document.getElementById("numerosIngresados");
+
+      tbodyNumeros.innerHTML = ""; // Limpiar contenido actual
+
+      for (let i = 0; i < numeros.length; i++) {
+        let row = tbodyNumeros.insertRow(i);
+        let cell = row.insertCell(0);
+        cell.innerHTML = numeros[i];
+      }
+
+      if (numeros.length === 4) {
+        let resultadoCell = document.getElementById("resultado");
+        let maximoCell = document.getElementById("maximo");
+        let minimoCell = document.getElementById("minimo");
+
+        let suma = numeros.reduce(function(acc, num) {
+          return acc + num;
+        }, 0);
+
+        let maximo = Math.max(...numeros);
+        let minimo = Math.min(...numeros);
+
+        resultadoCell.innerText = suma;
+        maximoCell.innerText = maximo;
+        minimoCell.innerText = minimo;
+      }
+    }
+  </script>
+
+</body>
+</html>
